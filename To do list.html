@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Tarefas</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto:wght@300&display=swap");
+
+      body {
+        background: rgb(210, 202, 210);
+        background: radial-gradient(
+          circle,
+          rgba(210, 202, 210, 1) 0%,
+          rgba(167, 43, 145, 1) 100%
+        );
+
+        display: flex;
+        justify-content: center;
+        font-family: "Roboto", sans-serif;
+      }
+      .boarder {
+        background-color: rgba(255, 255, 255, 0.85);
+        width: 320px;
+        margin: 4px;
+        display: flex;
+        flex-direction: column;
+      }
+      .add-card {
+        background-color: rgba(200, 200, 200, 0.4);
+        margin: 4px 8px;
+        border-radius: 3px;
+      }
+
+      .add-card p {
+        font-size: 12px;
+        padding: 0 6px;
+      }
+      .add-card:hover {
+        cursor: pointer;
+      }
+      h1 {
+        background-color: #f9b7ff;
+        color: white;
+        margin: 0;
+        text-align: center;
+        font-size: 22px;
+      }
+
+      ul {
+        list-style-type: none;
+        min-height: 300px;
+        padding: 2px;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+      }
+      li {
+        background-color: white;
+        box-shadow: 2px 2px rgba(0, 0, 0, 0.4);
+        border-radius: 4px;
+        min-width: 100px;
+        height: 40px;
+        display: flex;
+        margin: 6px 10px;
+        padding: 2px;
+        justify-content: space-between;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+      }
+      li:hover {
+        cursor: move;
+      }
+
+      .remove {
+        width: 16px;
+        height: 16px;
+        border-radius: 150%;
+        text-align: center;
+        font-size: 11px;
+        color: #c3c3c3;
+      }
+
+      .remove:hover {
+        cursor: pointer;
+        background-color: #ff6056;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="boarder">
+      <h1>A Fazer</h1>
+      <ul id="toDo" ondrop="drop(event, this.id)" ondragover="over(event)">
+        <li id="task" draggable="true" ondragstart="drag(event)">
+          <p>Ver Narutin</p>
+          <p class="remove" onclick="removeCard(this)">x</p>
+        </li>
+      </ul>
+      <div class="add-card" onclick="addCard(this)">
+        <p>Adicionar tarefa</p>
+      </div>
+    </div>
+
+    <div class="boarder">
+      <h1>Fazendo</h1>
+      <ul
+        id="doing"
+        ondrop="drop(event, this.id)"
+        ondragover="over(event)"
+      ></ul>
+      <div class="add-card" onclick="addCard(this)">
+        <p>Adicionar tarefa</p>
+      </div>
+    </div>
+
+    <div class="boarder">
+      <h1>Entregue</h1>
+      <ul id="done" ondrop="drop(event, this.id)" ondragover="over(event)"></ul>
+      <div class="add-card" onclick="addCard(this)">
+        <p>Adicionar tarefa</p>
+      </div>
+    </div>
+
+    <script>
+      function drag(event) {
+        event.dataTransfer.setData("card", event.target.id);
+      }
+
+      function over(event) {
+        event.preventDefault();
+      }
+
+      function drop(event, id) {
+        event.preventDefault();
+        const target = document.getElementById(id);
+        const data = event.dataTransfer.getData("card");
+        const card = document.getElementById(data);
+        target.appendChild(card);
+        event.dataTransfer.clearData();
+      }
+
+      function addCard(elemento) {
+        const ulId = elemento.previousElementSibling.id;
+        const text = prompt("Qual é a tarefa?");
+        const board = document.getElementById(ulId);
+        const template = `
+        <li id=${new Date().getTime()} draggable="true" ondragstart="drag(event)">
+          <p>${text}</p>
+          <p class="remove" onclick="removeCard(this)">x</p>
+        </li>`;
+
+        board.innerHTML = board.innerHTML + template;
+      }
+      function removeCard(elemento) {
+        document.getElementById(elemento.parentElement.id).remove();
+      }
+    </script>
+  </body>
+</html>
